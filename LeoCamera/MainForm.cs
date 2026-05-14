@@ -60,6 +60,7 @@ namespace LeoCamera
 
                 // 初始化模型
                 yolo = new LeoYolo(yoloOptions);
+                // 打开默认摄像头（索引0）
                 capture = new Leo.Camera.LeoCamera();
                 capture.AfterStop += (s, args) =>
                 {

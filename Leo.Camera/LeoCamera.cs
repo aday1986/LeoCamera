@@ -8,7 +8,6 @@ namespace Leo.Camera
     {
         private VideoCapture? capture;
         private CancellationTokenSource? cancelToken;
-        private Task? cameraTask;
 
         public LeoCamera()
         {
@@ -35,8 +34,7 @@ namespace Leo.Camera
             }
             cancelToken = new CancellationTokenSource();
             var token = cancelToken.Token;
-            cameraTask = Task.Run(() =>
-            {
+            Task.Run(() => { 
                 using var mat = new Mat();
                 while (!token.IsCancellationRequested && capture != null && capture.IsOpened())
                 {
@@ -44,7 +42,6 @@ namespace Leo.Camera
                     {
                         capture.Read(mat);
                         action?.Invoke(mat.ToBytes());
-                        Task.Delay(33);
                     }
                     catch (Exception ex)
                     {
@@ -55,7 +52,7 @@ namespace Leo.Camera
             }, token);
         }
 
-        public event EventHandler AfterStop;
+        public event EventHandler? AfterStop;
 
         /// <summary>
         /// 关闭摄像头并停止图像处理任务，释放相关资源。

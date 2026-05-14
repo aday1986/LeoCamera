@@ -28,6 +28,7 @@ namespace Leo.Yolo
         [Category("模型")]
         [DisplayName("尺寸")]
         [Description("")]
+        [ReadOnly(true)]
         public ModelSize ModelSize { get; set; } = ModelSize.Small;
 
         [Category("模型")]
