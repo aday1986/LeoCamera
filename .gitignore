@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/LeoCamera/Models/coco.names
+/LeoCamera/Models/yolov26n.onnx
+/LeoCamera/Models/yolov26s.onnx
