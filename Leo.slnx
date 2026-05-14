@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/App/">
+    <Project Path="LeoCamera/LeoCamera.csproj" />
+  </Folder>
+  <Project Path="Leo.Camera/Leo.Camera.csproj" />
+  <Project Path="Leo.Yolo/Leo.Yolo.csproj" />
+</Solution>
