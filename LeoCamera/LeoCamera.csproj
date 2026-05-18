@@ -20,49 +20,49 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Models\yolov26n.onnx">
+    <None Update="Models\yolo26n-cls.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov10s.onnx">
+    <None Update="Models\yolo26n-obb.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov11s-cls.onnx">
+    <None Update="Models\yolo26n-pose.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov11s-obb.onnx">
+    <None Update="Models\yolo26n-seg.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov11s-pose.onnx">
+    <None Update="Models\yolo26n.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov11s-seg.onnx">
+    <None Update="Models\yolo26s-cls.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov11s.onnx">
+    <None Update="Models\yolo26s-obb.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov12s.onnx">
+    <None Update="Models\yolo26s-pose.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov26s.onnx">
+    <None Update="Models\yolo26s-seg.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov8s-cls.onnx">
+    <None Update="Models\yolo26s.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov8s-obb.onnx">
+    <None Update="Models\yolo8s-cls.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov8s-pose.onnx">
+    <None Update="Models\yolo8s-obb.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov8s-seg.onnx">
+    <None Update="Models\yolo8s-pose.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov8s.onnx">
+    <None Update="Models\yolo8s-seg.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Models\yolov9s.onnx">
+    <None Update="Models\yolo8s.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -33,7 +33,7 @@ namespace LeoCamera
         // 在 Form1 类中添加字段
         private Leo.Camera.LeoCamera? capture;
         private LeoYolo? yolo = null;
-        private readonly LeoYoloOptions yoloOptions = new LeoYoloOptions()
+        private readonly Options options = new  Options()
         {
             ExecutionProvider = ExecutionProviderType.DirectML
         };
@@ -43,7 +43,7 @@ namespace LeoCamera
         public MainForm()
         {
             InitializeComponent();
-            propertyGridControl1.SelectedObject = yoloOptions;
+            propertyGridControl1.SelectedObject = options;
             barButtonItem2.Enabled = false;
 
         }
@@ -59,9 +59,9 @@ namespace LeoCamera
             {
 
                 // 初始化模型
-                yolo = new LeoYolo(yoloOptions);
+                yolo = new LeoYolo(options);
                 // 打开默认摄像头（索引0）
-                capture = new Leo.Camera.LeoCamera();
+                capture = new Leo.Camera.LeoCamera() { Delay=options.Delay };
                 capture.AfterStop += (s, args) =>
                 {
                     var action = () =>
@@ -139,5 +139,17 @@ namespace LeoCamera
                 MessageBox.Show($"发生错误: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class  Options:LeoYoloOptions
+    {
+        [DefaultValue(30)]
+        [Category("基础配置")]
+        [DisplayName("延迟")]
+        [Description("延迟时间，单位为毫秒，默认值为30ms。这个属性可以用来控制每帧图像处理之间的时间间隔，以避免过度占用系统资源或实现特定的帧率要求。")]
+        public int Delay { get; set; } = 30;
     }
 }

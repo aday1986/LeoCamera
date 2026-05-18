@@ -8,7 +8,7 @@ namespace Leo.Yolo
     /// </summary>
     public enum ModelType
     {
-        [Description("")]
+        [Description("object")]
         Object,
         [Description("obb")]
         Obb,

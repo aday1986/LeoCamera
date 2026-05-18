@@ -15,6 +15,11 @@ namespace Leo.Camera
         }
 
         /// <summary>
+        /// 延迟时间，单位为毫秒，默认值为30ms。这个属性可以用来控制每帧图像处理之间的时间间隔，以避免过度占用系统资源或实现特定的帧率要求。
+        /// </summary>
+        public int Delay { get; set; } = 30;
+
+        /// <summary>
         /// 启动摄像头并在每帧图像上执行指定的操作。操作以OpenCV的Mat对象形式接收图像数据。
         /// </summary>
         /// <param name="action"></param>
@@ -42,6 +47,12 @@ namespace Leo.Camera
                     {
                         capture.Read(mat);
                         action?.Invoke(mat.ToBytes());
+                        Task.Delay(Delay).Wait(token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        // 任务被取消，正常退出循环
+                        break;
                     }
                     catch (Exception ex)
                     {

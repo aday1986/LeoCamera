@@ -46,6 +46,7 @@
             dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
             dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             propertyGridControl1 = new DevExpress.XtraVerticalGrid.PropertyGridControl();
+            propertyDescriptionControl1 = new DevExpress.XtraVerticalGrid.PropertyDescriptionControl();
             ((System.ComponentModel.ISupportInitialize)pictureEdit1.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
@@ -184,7 +185,9 @@
             // 
             // dockPanel1_Container
             // 
+            dockPanel1_Container.BorderStyle = BorderStyle.FixedSingle;
             dockPanel1_Container.Controls.Add(propertyGridControl1);
+            dockPanel1_Container.Controls.Add(propertyDescriptionControl1);
             dockPanel1_Container.Location = new Point(9, 45);
             dockPanel1_Container.Name = "dockPanel1_Container";
             dockPanel1_Container.Size = new Size(444, 707);
@@ -192,13 +195,27 @@
             // 
             // propertyGridControl1
             // 
+            propertyGridControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             propertyGridControl1.Dock = DockStyle.Fill;
             propertyGridControl1.Location = new Point(0, 0);
             propertyGridControl1.MenuManager = barManager1;
             propertyGridControl1.Name = "propertyGridControl1";
             propertyGridControl1.OptionsView.AllowReadOnlyRowAppearance = DevExpress.Utils.DefaultBoolean.True;
-            propertyGridControl1.Size = new Size(444, 707);
+            propertyGridControl1.Size = new Size(442, 588);
             propertyGridControl1.TabIndex = 0;
+            // 
+            // propertyDescriptionControl1
+            // 
+            propertyDescriptionControl1.Appearance.Panel.BackColor = Color.White;
+            propertyDescriptionControl1.Appearance.Panel.Options.UseBackColor = true;
+            propertyDescriptionControl1.AutoHeight = true;
+            propertyDescriptionControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            propertyDescriptionControl1.Dock = DockStyle.Bottom;
+            propertyDescriptionControl1.Location = new Point(0, 588);
+            propertyDescriptionControl1.Name = "propertyDescriptionControl1";
+            propertyDescriptionControl1.PropertyGrid = propertyGridControl1;
+            propertyDescriptionControl1.Size = new Size(442, 117);
+            propertyDescriptionControl1.TabIndex = 1;
             // 
             // MainForm
             // 
@@ -244,5 +261,6 @@
         private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView1;
         private DevExpress.XtraBars.Docking.DockManager dockManager1;
         private DevExpress.XtraVerticalGrid.PropertyGridControl propertyGridControl1;
+        private DevExpress.XtraVerticalGrid.PropertyDescriptionControl propertyDescriptionControl1;
     }
 }

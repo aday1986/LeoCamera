@@ -8,16 +8,12 @@ namespace Leo.Yolo
     /// </summary>
     public enum ModelVision
     {
+        [Description("v5")]
+        V5,
         [Description("v8")]
         V8,
-        [Description("v9")]
-        V9,
-        [Description("v10")]
-        V10,
         [Description("v11")]
         V11,
-        [Description("v12")]
-        V12,
         [Description("v26")]
         V26,
     }
