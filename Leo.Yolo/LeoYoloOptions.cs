@@ -1,47 +1,60 @@
 ﻿using System.ComponentModel;
 
-
 namespace Leo.Yolo
 {
     public class LeoYoloOptions
     {
-        [DefaultValue(ExecutionProviderType.DirectML)]
-        [Category("硬件")]
-        [DisplayName("执行提供")]
-        [Description("使用Cpu或Gpu执行")]
-        public ExecutionProviderType ExecutionProvider { get; set; } = ExecutionProviderType.DirectML;
 
-        [DefaultValue(0)]
-        [Category("硬件")]
-        [DisplayName("Gpu")]
-        [Description("")]
-        public int GpuId { get; set; } = 0;
+        public virtual ExecutionProviderType ExecutionProvider { get; set; } = ExecutionProviderType.DirectML;
 
-        [DefaultValue(ModelVision.V26)]
-        [Category("模型")]
-        [DisplayName("版本")]
-        [Description("")]
-        public ModelVision ModelVision { get; set; } = ModelVision.V26;
+        public virtual int GpuId { get; set; } = 0;
 
-        [DefaultValue(ModelType.Object)]
-        [Category("模型")]
-        [DisplayName("类型")]
-        [Description("")]
-        public ModelType ModelType { get; set; } = ModelType.Object;
+        public virtual ModelVision ModelVision { get; set; } = ModelVision.V26;
 
-        [DefaultValue(ModelSize.Nano)]
-        [Category("模型")]
-        [DisplayName("尺寸")]
-        [Description("")]
-        [ReadOnly(false)]
-        public ModelSize ModelSize { get; set; } = ModelSize.Nano;
+        public virtual ModelType ModelType { get; set; } = ModelType.Object;
 
-        [Category("模型")]
-        [DisplayName("路径")]
-        [Description("配置了路径，则模型以该路径为准")]
-        public string? ModelPath { get; set; }
+        public virtual ModelSize ModelSize { get; set; } = ModelSize.Nano;
 
+        public virtual string? ModelPath { get; set; }
 
+        public virtual double Confidence { get; set; } = 0.2d;
+
+        public virtual double Iou { get; set; } = 0.5d;
+
+        /// <summary>
+        /// 跟踪器类型
+        /// </summary>
+        public virtual TrackerTypeEnum TrackerType { get; set; } = TrackerTypeEnum.Sort;
+
+        /// <summary>
+        /// 匹配阈值
+        /// 值越大：匹配越宽松，更容易把不同物体当成同一个（ID 切换少，但容易跟错）
+        /// 值越小：匹配越严格，不容易跟错，但容易丢失目标（ID 切换多）
+        /// </summary>
+        public virtual float CostThreshold { get; set; } = 0.5f;
+
+        /// <summary>
+        /// 最大消失帧数 / 目标丢失后保留帧数
+        /// </summary>
+        public virtual int MaxAge { get; set; } = 3;
+
+        /// <summary>
+        /// 轨迹历史长度 / 保留的历史轨迹点数量
+        /// 只影响轨迹显示和历史数据缓存，不会改变跟踪结果。
+        /// 
+        /// </summary>
+        public virtual int TailLength { get; set; } = 30;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum TrackerTypeEnum
+    {
+        None = 0,
+        Sort=1,
+        ByteTrack=2,
+        DeepSort=3
     }
 }
 

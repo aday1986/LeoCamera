@@ -7,7 +7,6 @@ using OpenCvSharp;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -25,6 +24,8 @@ using YoloDotNet.ExecutionProvider.OpenVino;
 using YoloDotNet.Extensions;
 using YoloDotNet.Models;
 using YoloDotNet.Models.Interfaces;
+using YoloDotNet.Video;
+
 
 namespace LeoCamera
 {
@@ -33,7 +34,7 @@ namespace LeoCamera
         // 在 Form1 类中添加字段
         private Leo.Camera.LeoCamera? capture;
         private LeoYolo? yolo = null;
-        private readonly Options options = new  Options()
+        private readonly Options options = new Options()
         {
             ExecutionProvider = ExecutionProviderType.DirectML
         };
@@ -43,9 +44,22 @@ namespace LeoCamera
         public MainForm()
         {
             InitializeComponent();
+            this.Load += MainForm_Load;
+
+        }
+
+        private void MainForm_Load(object? sender, EventArgs e)
+        {
             propertyGridControl1.SelectedObject = options;
             barButtonItem2.Enabled = false;
+        }
 
+        private void SetControlEnabled(bool isRunning)
+        {
+            barButtonItem1.Enabled = !isRunning;
+            barButtonItem2.Enabled = isRunning;
+            barButtonItem3.Enabled = !isRunning;
+            propertyGridControl1.Enabled = !isRunning;
         }
 
         /// <summary>
@@ -57,20 +71,15 @@ namespace LeoCamera
         {
             try
             {
-
-                // 初始化模型
                 yolo = new LeoYolo(options);
-                // 打开默认摄像头（索引0）
-                capture = new Leo.Camera.LeoCamera() { Delay=options.Delay };
+                capture = new Leo.Camera.LeoCamera() { Delay = options.Delay };
                 capture.AfterStop += (s, args) =>
                 {
                     var action = () =>
                     {
                         pictureEdit1.Image?.Dispose();
                         pictureEdit1.Image = null;
-                        barButtonItem1.Enabled = true;
-                        barButtonItem2.Enabled = false;
-                        propertyGridControl1.Enabled = true;
+                        SetControlEnabled(false);
                     };
                     if (pictureEdit1.InvokeRequired)
                     {
@@ -85,7 +94,6 @@ namespace LeoCamera
                  {
                      try
                      {
-                         // 进行检测
                          frameData = yolo.Detect(frameData);
                          using (MemoryStream ms = new MemoryStream(frameData))
                          {
@@ -107,14 +115,12 @@ namespace LeoCamera
                      }
                      catch (Exception ex)
                      {
+                         capture?.StopCamera();
                          // 捕获检测过程中的异常并显示
                          MessageBox.Show($"检测错误: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                      }
-                 });
-
-                barButtonItem1.Enabled = false;
-                barButtonItem2.Enabled = true;
-                propertyGridControl1.Enabled = false;
+                 }, options.CameraId);
+                SetControlEnabled(true);
             }
             catch (Exception ex)
             {
@@ -132,24 +138,42 @@ namespace LeoCamera
             try
             {
                 capture?.StopCamera();
-               
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"发生错误: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class  Options:LeoYoloOptions
-    {
-        [DefaultValue(30)]
-        [Category("基础配置")]
-        [DisplayName("延迟")]
-        [Description("延迟时间，单位为毫秒，默认值为30ms。这个属性可以用来控制每帧图像处理之间的时间间隔，以避免过度占用系统资源或实现特定的帧率要求。")]
-        public int Delay { get; set; } = 30;
+        /// <summary>
+        /// 识别图片
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            try
+            {
+                var openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif|All Files|*.*";
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                yolo = new LeoYolo(options);
+                var frameData = yolo.Detect(openFileDialog.FileName);
+                using (MemoryStream ms = new MemoryStream(frameData))
+                {
+                    Image image = Image.FromStream(ms);
+                    pictureEdit1.Image?.Dispose();
+                    pictureEdit1.Image = image;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"发生错误: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
     }
 }

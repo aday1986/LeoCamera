@@ -36,6 +36,7 @@
             barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             bar3 = new DevExpress.XtraBars.Bar();
+            barStaticItem1 = new DevExpress.XtraBars.BarStaticItem();
             barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
             barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
@@ -47,6 +48,7 @@
             dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             propertyGridControl1 = new DevExpress.XtraVerticalGrid.PropertyGridControl();
             propertyDescriptionControl1 = new DevExpress.XtraVerticalGrid.PropertyDescriptionControl();
+            barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)pictureEdit1.Properties).BeginInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).BeginInit();
@@ -65,7 +67,7 @@
             pictureEdit1.Properties.NullText = "摄像头未启动";
             pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
             pictureEdit1.Properties.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Zoom;
-            pictureEdit1.Size = new Size(825, 757);
+            pictureEdit1.Size = new Size(825, 736);
             pictureEdit1.TabIndex = 1;
             // 
             // barManager1
@@ -76,8 +78,8 @@
             barManager1.DockControls.Add(barDockControlLeft);
             barManager1.DockControls.Add(barDockControlRight);
             barManager1.Form = this;
-            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { barButtonItem1, barButtonItem2 });
-            barManager1.MaxItemId = 5;
+            barManager1.Items.AddRange(new DevExpress.XtraBars.BarItem[] { barButtonItem1, barButtonItem2, barStaticItem1, barButtonItem3 });
+            barManager1.MaxItemId = 7;
             barManager1.StatusBar = bar3;
             // 
             // bar2
@@ -86,10 +88,12 @@
             bar2.DockCol = 0;
             bar2.DockRow = 0;
             bar2.DockStyle = DevExpress.XtraBars.BarDockStyle.Top;
-            bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(barButtonItem1), new DevExpress.XtraBars.LinkPersistInfo(barButtonItem2) });
+            bar2.FloatLocation = new Point(749, 278);
+            bar2.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(barButtonItem1), new DevExpress.XtraBars.LinkPersistInfo(barButtonItem2), new DevExpress.XtraBars.LinkPersistInfo(barButtonItem3) });
+            bar2.OptionsBar.DisableClose = true;
             bar2.OptionsBar.MultiLine = true;
             bar2.OptionsBar.UseWholeRow = true;
-            bar2.Text = "Main menu";
+            bar2.Text = "功能";
             // 
             // barButtonItem1
             // 
@@ -118,10 +122,18 @@
             bar3.DockCol = 0;
             bar3.DockRow = 0;
             bar3.DockStyle = DevExpress.XtraBars.BarDockStyle.Bottom;
+            bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] { new DevExpress.XtraBars.LinkPersistInfo(barStaticItem1) });
             bar3.OptionsBar.AllowQuickCustomization = false;
             bar3.OptionsBar.DrawDragBorder = false;
             bar3.OptionsBar.UseWholeRow = true;
             bar3.Text = "Status bar";
+            // 
+            // barStaticItem1
+            // 
+            barStaticItem1.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
+            barStaticItem1.Caption = "状态";
+            barStaticItem1.Id = 5;
+            barStaticItem1.Name = "barStaticItem1";
             // 
             // barDockControlTop
             // 
@@ -135,9 +147,9 @@
             // 
             barDockControlBottom.CausesValidation = false;
             barDockControlBottom.Dock = DockStyle.Bottom;
-            barDockControlBottom.Location = new Point(0, 799);
+            barDockControlBottom.Location = new Point(0, 778);
             barDockControlBottom.Manager = barManager1;
-            barDockControlBottom.Size = new Size(1283, 24);
+            barDockControlBottom.Size = new Size(1283, 45);
             // 
             // barDockControlLeft
             // 
@@ -145,7 +157,7 @@
             barDockControlLeft.Dock = DockStyle.Left;
             barDockControlLeft.Location = new Point(0, 42);
             barDockControlLeft.Manager = barManager1;
-            barDockControlLeft.Size = new Size(0, 757);
+            barDockControlLeft.Size = new Size(0, 736);
             // 
             // barDockControlRight
             // 
@@ -153,7 +165,7 @@
             barDockControlRight.Dock = DockStyle.Right;
             barDockControlRight.Location = new Point(1283, 42);
             barDockControlRight.Manager = barManager1;
-            barDockControlRight.Size = new Size(0, 757);
+            barDockControlRight.Size = new Size(0, 736);
             // 
             // documentManager1
             // 
@@ -180,7 +192,7 @@
             dockPanel1.Options.AllowDockFill = false;
             dockPanel1.Options.AllowDockTop = false;
             dockPanel1.OriginalSize = new Size(458, 200);
-            dockPanel1.Size = new Size(458, 757);
+            dockPanel1.Size = new Size(458, 736);
             dockPanel1.Text = "属性";
             // 
             // dockPanel1_Container
@@ -190,7 +202,7 @@
             dockPanel1_Container.Controls.Add(propertyDescriptionControl1);
             dockPanel1_Container.Location = new Point(9, 45);
             dockPanel1_Container.Name = "dockPanel1_Container";
-            dockPanel1_Container.Size = new Size(444, 707);
+            dockPanel1_Container.Size = new Size(444, 686);
             dockPanel1_Container.TabIndex = 0;
             // 
             // propertyGridControl1
@@ -201,7 +213,7 @@
             propertyGridControl1.MenuManager = barManager1;
             propertyGridControl1.Name = "propertyGridControl1";
             propertyGridControl1.OptionsView.AllowReadOnlyRowAppearance = DevExpress.Utils.DefaultBoolean.True;
-            propertyGridControl1.Size = new Size(442, 588);
+            propertyGridControl1.Size = new Size(442, 567);
             propertyGridControl1.TabIndex = 0;
             // 
             // propertyDescriptionControl1
@@ -211,11 +223,21 @@
             propertyDescriptionControl1.AutoHeight = true;
             propertyDescriptionControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             propertyDescriptionControl1.Dock = DockStyle.Bottom;
-            propertyDescriptionControl1.Location = new Point(0, 588);
+            propertyDescriptionControl1.Location = new Point(0, 567);
             propertyDescriptionControl1.Name = "propertyDescriptionControl1";
             propertyDescriptionControl1.PropertyGrid = propertyGridControl1;
             propertyDescriptionControl1.Size = new Size(442, 117);
             propertyDescriptionControl1.TabIndex = 1;
+            // 
+            // barButtonItem3
+            // 
+            barButtonItem3.Caption = "识别图片";
+            barButtonItem3.Id = 6;
+            barButtonItem3.ImageOptions.Image = (Image)resources.GetObject("barButtonItem3.ImageOptions.Image");
+            barButtonItem3.ImageOptions.LargeImage = (Image)resources.GetObject("barButtonItem3.ImageOptions.LargeImage");
+            barButtonItem3.Name = "barButtonItem3";
+            barButtonItem3.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            barButtonItem3.ItemClick += barButtonItem3_ItemClick;
             // 
             // MainForm
             // 
@@ -231,7 +253,6 @@
             IsMdiContainer = true;
             Name = "MainForm";
             Text = "摄像头识别";
-            WindowState = FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)pictureEdit1.Properties).EndInit();
             ((System.ComponentModel.ISupportInitialize)barManager1).EndInit();
             ((System.ComponentModel.ISupportInitialize)documentManager1).EndInit();
@@ -262,5 +283,7 @@
         private DevExpress.XtraBars.Docking.DockManager dockManager1;
         private DevExpress.XtraVerticalGrid.PropertyGridControl propertyGridControl1;
         private DevExpress.XtraVerticalGrid.PropertyDescriptionControl propertyDescriptionControl1;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem3;
     }
 }

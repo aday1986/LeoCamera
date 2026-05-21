@@ -1,11 +1,8 @@
 ﻿using SkiaSharp;
 using System.ComponentModel;
-using System.Drawing;
-using YoloDotNet;
 using YoloDotNet.Extensions;
 using YoloDotNet.Models;
 using YoloDotNet.Models.Interfaces;
-using YoloDotNet.Trackers;
 
 
 namespace Leo.Yolo
@@ -16,13 +13,16 @@ namespace Leo.Yolo
         private static PoseDrawingOptions? _drawingOptions = null;
         private readonly LeoYoloOptions options;
         private YoloDotNet.Yolo? yolo = null;
-        private static SortTracker _sortTracker = default!;
+        private ITracker? tracker = null;
 
         public LeoYolo(LeoYoloOptions options)
         {
             IExecutionProvider? extenderProvider = null;
-            _sortTracker = new SortTracker(0.7f, 10, 30);
-            var modelPath = options.ModelPath ?? $"./models/yolo{GetEnumDescription(options.ModelVision).Trim('v')}{GetEnumDescription(options.ModelSize)}{("-" + GetEnumDescription(options.ModelType).Replace("object", "")).TrimEnd('-')}.onnx";
+            var modelPath = options.ModelPath;
+            if (modelPath is null || modelPath == string.Empty)
+            {
+                modelPath = $"./models/yolo{GetEnumDescription(options.ModelVision).Trim('v')}{GetEnumDescription(options.ModelSize)}{("-" + GetEnumDescription(options.ModelType).Replace("object", "")).TrimEnd('-')}.onnx";
+            }
             if (!File.Exists(modelPath))
             {
                 throw new FileNotFoundException($"Model file not found at path: {modelPath}");
@@ -30,7 +30,7 @@ namespace Leo.Yolo
             switch (options.ExecutionProvider)
             {
                 case ExecutionProviderType.CPU:
-                    extenderProvider = new YoloDotNet.ExecutionProvider.Cpu.CpuExecutionProvider(modelPath) ;
+                    extenderProvider = new YoloDotNet.ExecutionProvider.Cpu.CpuExecutionProvider(modelPath);
                     break;
                 case ExecutionProviderType.CUDA:
                     extenderProvider = new YoloDotNet.ExecutionProvider.Cuda.CudaExecutionProvider(modelPath, options.GpuId);
@@ -50,8 +50,23 @@ namespace Leo.Yolo
             yolo = new YoloDotNet.Yolo(new YoloOptions()
             {
                 ExecutionProvider = extenderProvider,
-                
             });
+            switch (options.TrackerType)
+            {
+                case TrackerTypeEnum.None:
+                    tracker = null;
+                    break;
+                case TrackerTypeEnum.Sort:
+                    tracker = new BaseSortTracker(options.CostThreshold, options.MaxAge, options.TailLength);
+                    break;
+                case TrackerTypeEnum.ByteTrack:
+                    throw new Exception("ByteTrack tracker is currently not supported.");
+                case TrackerTypeEnum.DeepSort:
+                    throw new Exception("DeepSort tracker is currently not supported.");
+                default:
+                    tracker = null;
+                    break;
+            }
 
             this.options = options;
         }
@@ -64,6 +79,16 @@ namespace Leo.Yolo
             return descriptionAttribute != null && descriptionAttribute.Length > 0 ? descriptionAttribute[0].Description : value.ToString();
         }
 
+        public byte[] Detect(string imagePath)
+        {
+            if (!File.Exists(imagePath))
+            {
+                throw new FileNotFoundException($"Image file not found at path: {imagePath}");
+            }
+            var imageData = File.ReadAllBytes(imagePath);
+            return Detect(imageData);
+        }
+
         public byte[] Detect(byte[] image)
         {
             if (yolo == null)
@@ -74,20 +99,27 @@ namespace Leo.Yolo
             switch (options.ModelType)
             {
                 case ModelType.Object:
-                    var objResults = yolo.RunObjectDetection(skBitmap,0.7f);
-                    objResults.Track(_sortTracker);
+                    var objResults = yolo.RunObjectDetection(skBitmap, options.Confidence, options.Iou);
+                    if (tracker != null)
+                    {
+                        objResults.Track(tracker);
+                    }
                     skBitmap.Draw(objResults);
                     break;
                 case ModelType.Obb:
-                    var obbResults = yolo.RunObbDetection(skBitmap);
+                    var obbResults = yolo.RunObbDetection(skBitmap, options.Confidence, options.Iou);
+                    if (tracker != null)
+                    {
+                        obbResults.Track(tracker);
+                    }
                     skBitmap.Draw(obbResults);
                     break;
                 case ModelType.Pose:
-                    var poseResults = yolo.RunPoseEstimation(skBitmap);
+                    var poseResults = yolo.RunPoseEstimation(skBitmap, options.Confidence, options.Iou);
                     skBitmap.Draw(poseResults, _drawingOptions!);
                     break;
                 case ModelType.Seg:
-                    var segResults = yolo.RunSegmentation(skBitmap);
+                    var segResults = yolo.RunSegmentation(skBitmap, options.Confidence);
                     skBitmap.Draw(segResults);
                     break;
                 case ModelType.Cls:
@@ -138,8 +170,6 @@ namespace Leo.Yolo
             }
         }
     }
-
-
 }
 
 

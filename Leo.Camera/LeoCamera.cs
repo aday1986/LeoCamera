@@ -56,6 +56,7 @@ namespace Leo.Camera
                     }
                     catch (Exception ex)
                     {
+                        AfterStop?.Invoke(this, new EventArgs());
                         throw ex;
                     }
                 }
