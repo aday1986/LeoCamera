@@ -10,10 +10,10 @@ namespace Leo.Yolo
 
     public class LeoYolo : IDisposable
     {
-        private static PoseDrawingOptions? _drawingOptions = null;
+        private static PoseDrawingOptions? drawingOptions = null;
         private readonly LeoYoloOptions options;
-        private YoloDotNet.Yolo? yolo = null;
-        private ITracker? tracker = null;
+        private readonly YoloDotNet.Yolo? yolo = null;
+        private readonly ITracker? tracker = null;
 
         public LeoYolo(LeoYoloOptions options)
         {
@@ -71,14 +71,6 @@ namespace Leo.Yolo
             this.options = options;
         }
 
-
-        private static string GetEnumDescription(Enum value)
-        {
-            var fieldInfo = value.GetType().GetField(value.ToString());
-            var descriptionAttribute = fieldInfo?.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
-            return descriptionAttribute != null && descriptionAttribute.Length > 0 ? descriptionAttribute[0].Description : value.ToString();
-        }
-
         public byte[] Detect(string imagePath)
         {
             if (!File.Exists(imagePath))
@@ -116,7 +108,7 @@ namespace Leo.Yolo
                     break;
                 case ModelType.Pose:
                     var poseResults = yolo.RunPoseEstimation(skBitmap, options.Confidence, options.Iou);
-                    skBitmap.Draw(poseResults, _drawingOptions!);
+                    skBitmap.Draw(poseResults, drawingOptions!);
                     break;
                 case ModelType.Seg:
                     var segResults = yolo.RunSegmentation(skBitmap, options.Confidence);
@@ -133,18 +125,21 @@ namespace Leo.Yolo
             return data.ToArray();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         static LeoYolo()
         {
             SetDrawingOptions();
         }
 
+        private static string GetEnumDescription(Enum value)
+        {
+            var fieldInfo = value.GetType().GetField(value.ToString());
+            var descriptionAttribute = fieldInfo?.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+            return descriptionAttribute != null && descriptionAttribute.Length > 0 ? descriptionAttribute[0].Description : value.ToString();
+        }
 
         private static void SetDrawingOptions()
         {
-            _drawingOptions = new PoseDrawingOptions
+            drawingOptions = new PoseDrawingOptions
             {
                 DrawBoundingBoxes = true,
                 DrawConfidenceScore = true,

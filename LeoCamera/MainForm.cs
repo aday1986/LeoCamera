@@ -1,30 +1,4 @@
-﻿using DevExpress.Office.Utils;
-using DevExpress.XtraEditors.Controls;
-using DevExpress.XtraEditors.Repository;
-using Leo.Camera;
-using Leo.Yolo;
-using OpenCvSharp;
-using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using YoloDotNet.Exceptions;
-using YoloDotNet.ExecutionProvider.Cpu;
-using YoloDotNet.ExecutionProvider.Cuda;
-using YoloDotNet.ExecutionProvider.DirectML;
-using YoloDotNet.ExecutionProvider.OpenVino;
-using YoloDotNet.Extensions;
-using YoloDotNet.Models;
-using YoloDotNet.Models.Interfaces;
-using YoloDotNet.Video;
+﻿using Leo.Yolo;
 
 
 namespace LeoCamera
@@ -34,10 +8,7 @@ namespace LeoCamera
         // 在 Form1 类中添加字段
         private Leo.Camera.LeoCamera? capture;
         private LeoYolo? yolo = null;
-        private readonly Options options = new Options()
-        {
-            ExecutionProvider = ExecutionProviderType.DirectML
-        };
+        private Options? options = null;
         /// <summary>
         /// 
         /// </summary>
@@ -45,21 +16,64 @@ namespace LeoCamera
         {
             InitializeComponent();
             this.Load += MainForm_Load;
+            LoadOptions();
+            propertyGrid1.SelectedObject = options;
+            propertyGrid1.PropertyValueChanged += (s, args) =>
+            {
+                SaveOptions();
+            };
+            btnStart.Click += barButtonItem1_ItemClick;
+            btnStop.Click += barButtonItem2_ItemClick;
+            btnImage.Click += barButtonItem3_ItemClick;
 
+        }
+
+        private void LoadOptions()
+        {
+            try
+            {
+                if (File.Exists("config.json"))
+                {
+                    var json = File.ReadAllText("config.json");
+                    options = System.Text.Json.JsonSerializer.Deserialize<Options>(json) ?? new Options();
+                }
+                else
+                {
+                    options = new Options();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"加载配置文件失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void SaveOptions()
+        {
+            try
+            {
+                var json = System.Text.Json.JsonSerializer.Serialize(options, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText("config.json", json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"保存配置文件失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
         }
 
         private void MainForm_Load(object? sender, EventArgs e)
         {
-            propertyGridControl1.SelectedObject = options;
-            barButtonItem2.Enabled = false;
+            SetControlEnabled(false);
         }
 
         private void SetControlEnabled(bool isRunning)
         {
-            barButtonItem1.Enabled = !isRunning;
-            barButtonItem2.Enabled = isRunning;
-            barButtonItem3.Enabled = !isRunning;
-            propertyGridControl1.Enabled = !isRunning;
+            btnStart.Enabled = !isRunning;
+            btnStop.Enabled = isRunning;
+            btnImage.Enabled = !isRunning;
+            propertyGrid1.Enabled = !isRunning;
         }
 
         /// <summary>
@@ -67,23 +81,25 @@ namespace LeoCamera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void barButtonItem1_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void barButtonItem1_ItemClick(object? sender, EventArgs e)
         {
             try
             {
+                this.Cursor = Cursors.WaitCursor;
                 yolo = new LeoYolo(options);
+
                 capture = new Leo.Camera.LeoCamera() { Delay = options.Delay };
                 capture.AfterStop += (s, args) =>
                 {
                     var action = () =>
                     {
-                        pictureEdit1.Image?.Dispose();
-                        pictureEdit1.Image = null;
+                        pictureBox1.Image?.Dispose();
+                        pictureBox1.Image = null;
                         SetControlEnabled(false);
                     };
-                    if (pictureEdit1.InvokeRequired)
+                    if (pictureBox1.InvokeRequired)
                     {
-                        pictureEdit1.Invoke(action);
+                        pictureBox1.Invoke(action);
                     }
                     else
                     {
@@ -100,12 +116,12 @@ namespace LeoCamera
                              Image image = Image.FromStream(ms);
                              var action = () =>
                              {
-                                 pictureEdit1.Image?.Dispose();
-                                 pictureEdit1.Image = image;
+                                 pictureBox1.Image?.Dispose();
+                                 pictureBox1.Image = image;
                              };
-                             if (pictureEdit1.InvokeRequired)
+                             if (pictureBox1.InvokeRequired)
                              {
-                                 pictureEdit1.Invoke(action);
+                                 pictureBox1.Invoke(action);
                              }
                              else
                              {
@@ -126,6 +142,10 @@ namespace LeoCamera
             {
                 MessageBox.Show($"发生错误: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         /// <summary>
@@ -133,7 +153,7 @@ namespace LeoCamera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void barButtonItem2_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private async void barButtonItem2_ItemClick(object? sender, EventArgs e)
         {
             try
             {
@@ -150,7 +170,7 @@ namespace LeoCamera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void barButtonItem3_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        private void barButtonItem3_ItemClick(object? sender, EventArgs e)
         {
             try
             {
@@ -160,20 +180,24 @@ namespace LeoCamera
                 {
                     return;
                 }
+                this.Cursor = Cursors.WaitCursor;
                 yolo = new LeoYolo(options);
                 var frameData = yolo.Detect(openFileDialog.FileName);
                 using (MemoryStream ms = new MemoryStream(frameData))
                 {
                     Image image = Image.FromStream(ms);
-                    pictureEdit1.Image?.Dispose();
-                    pictureEdit1.Image = image;
+                    pictureBox1.Image?.Dispose();
+                    pictureBox1.Image = image;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"发生错误: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
     }
 }
