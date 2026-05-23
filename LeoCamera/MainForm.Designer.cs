@@ -36,6 +36,8 @@
             btnStart = new ToolStripButton();
             btnStop = new ToolStripButton();
             btnImage = new ToolStripButton();
+            toolStripSeparator1 = new ToolStripSeparator();
+            btnReset = new ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -84,7 +86,7 @@
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(28, 28);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { btnStart, btnStop, btnImage });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { btnStart, btnStop, toolStripSeparator1, btnImage, btnReset });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(1283, 38);
@@ -115,6 +117,20 @@
             btnImage.Size = new Size(128, 32);
             btnImage.Text = "选择图片";
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 38);
+            // 
+            // btnReset
+            // 
+            btnReset.Alignment = ToolStripItemAlignment.Right;
+            btnReset.Image = (Image)resources.GetObject("btnReset.Image");
+            btnReset.ImageTransparentColor = Color.Magenta;
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(128, 32);
+            btnReset.Text = "重置配置";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(13F, 28F);
@@ -122,9 +138,9 @@
             ClientSize = new Size(1283, 823);
             Controls.Add(splitContainer1);
             Controls.Add(toolStrip1);
-            IsMdiContainer = true;
             Name = "MainForm";
             Text = "摄像头识别";
+            WindowState = FormWindowState.Maximized;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
@@ -144,5 +160,7 @@
         private ToolStripButton btnStart;
         private ToolStripButton btnStop;
         private ToolStripButton btnImage;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton btnReset;
     }
 }

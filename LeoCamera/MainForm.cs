@@ -15,17 +15,38 @@ namespace LeoCamera
         public MainForm()
         {
             InitializeComponent();
-            this.Load += MainForm_Load;
-            LoadOptions();
-            propertyGrid1.SelectedObject = options;
-            propertyGrid1.PropertyValueChanged += (s, args) =>
+            try
             {
-                SaveOptions();
-            };
-            btnStart.Click += barButtonItem1_ItemClick;
-            btnStop.Click += barButtonItem2_ItemClick;
-            btnImage.Click += barButtonItem3_ItemClick;
+                btnStart.Click += btnStart_ItemClick;
+                btnStop.Click += btnStop_ItemClick;
+                btnImage.Click += btnImage_ItemClick;
+                btnReset.Click += BtnReset_Click;
+                LoadOptions();
+                propertyGrid1.PropertyValueChanged += (s, args) =>
+                {
+                    SaveOptions();
+                };
+                SetControlEnabled(false);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
+        private void BtnReset_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                options = new Options();
+                SaveOptions();
+                LoadOptions();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"重置配置失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
         }
 
         private void LoadOptions()
@@ -41,6 +62,7 @@ namespace LeoCamera
                 {
                     options = new Options();
                 }
+                propertyGrid1.SelectedObject = options;
             }
             catch (Exception ex)
             {
@@ -63,11 +85,6 @@ namespace LeoCamera
             }
         }
 
-        private void MainForm_Load(object? sender, EventArgs e)
-        {
-            SetControlEnabled(false);
-        }
-
         private void SetControlEnabled(bool isRunning)
         {
             btnStart.Enabled = !isRunning;
@@ -81,7 +98,7 @@ namespace LeoCamera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void barButtonItem1_ItemClick(object? sender, EventArgs e)
+        private void btnStart_ItemClick(object? sender, EventArgs e)
         {
             try
             {
@@ -153,7 +170,7 @@ namespace LeoCamera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void barButtonItem2_ItemClick(object? sender, EventArgs e)
+        private async void btnStop_ItemClick(object? sender, EventArgs e)
         {
             try
             {
@@ -170,7 +187,7 @@ namespace LeoCamera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void barButtonItem3_ItemClick(object? sender, EventArgs e)
+        private void btnImage_ItemClick(object? sender, EventArgs e)
         {
             try
             {
