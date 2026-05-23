@@ -35,9 +35,10 @@
             toolStrip1 = new ToolStrip();
             btnStart = new ToolStripButton();
             btnStop = new ToolStripButton();
-            btnImage = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
+            btnImage = new ToolStripButton();
             btnReset = new ToolStripButton();
+            statusStrip1 = new StatusStrip();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -52,11 +53,12 @@
             propertyGrid1.Dock = DockStyle.Fill;
             propertyGrid1.Location = new Point(0, 0);
             propertyGrid1.Name = "propertyGrid1";
-            propertyGrid1.Size = new Size(379, 785);
+            propertyGrid1.Size = new Size(377, 761);
             propertyGrid1.TabIndex = 7;
             // 
             // splitContainer1
             // 
+            splitContainer1.BorderStyle = BorderStyle.FixedSingle;
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.FixedPanel = FixedPanel.Panel2;
             splitContainer1.Location = new Point(0, 38);
@@ -69,7 +71,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(propertyGrid1);
-            splitContainer1.Size = new Size(1283, 785);
+            splitContainer1.Size = new Size(1283, 763);
             splitContainer1.SplitterDistance = 900;
             splitContainer1.TabIndex = 9;
             // 
@@ -78,7 +80,7 @@
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(900, 785);
+            pictureBox1.Size = new Size(898, 761);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -109,6 +111,11 @@
             btnStop.Size = new Size(86, 32);
             btnStop.Text = "停止";
             // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 38);
+            // 
             // btnImage
             // 
             btnImage.Image = (Image)resources.GetObject("btnImage.Image");
@@ -116,11 +123,6 @@
             btnImage.Name = "btnImage";
             btnImage.Size = new Size(128, 32);
             btnImage.Text = "选择图片";
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 38);
             // 
             // btnReset
             // 
@@ -131,6 +133,15 @@
             btnReset.Size = new Size(128, 32);
             btnReset.Text = "重置配置";
             // 
+            // statusStrip1
+            // 
+            statusStrip1.ImageScalingSize = new Size(28, 28);
+            statusStrip1.Location = new Point(0, 801);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(1283, 22);
+            statusStrip1.TabIndex = 12;
+            statusStrip1.Text = "statusStrip1";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(13F, 28F);
@@ -138,6 +149,7 @@
             ClientSize = new Size(1283, 823);
             Controls.Add(splitContainer1);
             Controls.Add(toolStrip1);
+            Controls.Add(statusStrip1);
             Name = "MainForm";
             Text = "摄像头识别";
             WindowState = FormWindowState.Maximized;
@@ -162,5 +174,6 @@
         private ToolStripButton btnImage;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton btnReset;
+        private StatusStrip statusStrip1;
     }
 }

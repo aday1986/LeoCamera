@@ -92,26 +92,22 @@ namespace Leo.Yolo
             {
                 case ModelType.Object:
                     var objResults = yolo.RunObjectDetection(skBitmap, options.Confidence, options.Iou);
-                    if (tracker != null)
-                    {
-                        objResults.Track(tracker);
-                    }
+                    objResults.Track(tracker);
                     skBitmap.Draw(objResults);
                     break;
                 case ModelType.Obb:
                     var obbResults = yolo.RunObbDetection(skBitmap, options.Confidence, options.Iou);
-                    if (tracker != null)
-                    {
-                        obbResults.Track(tracker);
-                    }
+                    obbResults.Track(tracker);
                     skBitmap.Draw(obbResults);
                     break;
                 case ModelType.Pose:
                     var poseResults = yolo.RunPoseEstimation(skBitmap, options.Confidence, options.Iou);
+                    poseResults.Track(tracker);
                     skBitmap.Draw(poseResults, drawingOptions!);
                     break;
                 case ModelType.Seg:
                     var segResults = yolo.RunSegmentation(skBitmap, options.Confidence);
+                    segResults.Track(tracker);
                     skBitmap.Draw(segResults);
                     break;
                 case ModelType.Cls:

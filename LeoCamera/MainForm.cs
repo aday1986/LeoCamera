@@ -90,6 +90,7 @@ namespace LeoCamera
             btnStart.Enabled = !isRunning;
             btnStop.Enabled = isRunning;
             btnImage.Enabled = !isRunning;
+            btnReset.Enabled = !isRunning;
             propertyGrid1.Enabled = !isRunning;
         }
 
@@ -102,9 +103,9 @@ namespace LeoCamera
         {
             try
             {
+                options ??= new Options();
                 this.Cursor = Cursors.WaitCursor;
                 yolo = new LeoYolo(options);
-
                 capture = new Leo.Camera.LeoCamera() { Delay = options.Delay };
                 capture.AfterStop += (s, args) =>
                 {
@@ -198,6 +199,7 @@ namespace LeoCamera
                     return;
                 }
                 this.Cursor = Cursors.WaitCursor;
+                options ??= new Options();
                 yolo = new LeoYolo(options);
                 var frameData = yolo.Detect(openFileDialog.FileName);
                 using (MemoryStream ms = new MemoryStream(frameData))

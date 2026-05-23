@@ -5,9 +5,9 @@ namespace Leo.Yolo
 {
     public static class TrackerExtension
     {
-        public static List<T> Track<T>(this List<T> detections, ITracker track) where T : IDetection
+        public static List<T> Track<T>(this List<T> detections, ITracker? track) where T : IDetection
         {
-            track.UpdateTracker(detections);
+            track?.UpdateTracker(detections);
             return detections;
         }
     }
