@@ -54,10 +54,10 @@ namespace Leo.Camera
                         // 任务被取消，正常退出循环
                         break;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         AfterStop?.Invoke(this, new EventArgs());
-                        throw ex;
+                        throw;
                     }
                 }
                 AfterStop?.Invoke(this, new EventArgs());

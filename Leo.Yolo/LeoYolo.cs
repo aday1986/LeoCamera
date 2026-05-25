@@ -1,5 +1,7 @@
-﻿using SkiaSharp;
+﻿
+using SkiaSharp;
 using System.ComponentModel;
+using YoloDotNet;
 using YoloDotNet.Extensions;
 using YoloDotNet.Models;
 using YoloDotNet.Models.Interfaces;
